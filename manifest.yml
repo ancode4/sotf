@@ -1,0 +1,21 @@
+modules:
+  jira:adminPage:
+    - key: stay-on-top-main-admin-page
+      function: main-admin-page
+      title: Stay on top
+  jira:issueGlance:
+    - key: stay-on-top-jira-issue-glance
+      function: main-glance
+      title: Stay on top
+      label: Key information
+      icon: https://www.sparxsys.com/sites/default/files/stay-on-top-logo-square.png
+  function:
+    - key: main-glance
+      handler: index.run
+    - key: main-admin-page
+      handler: admin-page.runAdminPage
+app:
+  id: ari:cloud:ecosystem::app/6eba0826-b868-429a-bcec-f8dfa96de733
+permissions:
+  scopes:
+    - read:jira-work
