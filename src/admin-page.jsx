@@ -11,16 +11,13 @@ const ConfigurePage = () => {
 
 const MainAdminPage = () => {
     const projects = useState(async ()=> await getProjects() );
-    console.log("PROJECT:");
-    console.log(JSON.stringify(projects, null, 2))
-
+    const values = projects[0].values;
     let tabs = []
 
-    for(let i=0;i<projects.length;i++){
-        let project = projects[i];
-        console.log(JSON.stringify(project.name))
-        tabs.push(<Tab label="{project.key}">
-                    <Text>{project.name}</Text>
+    for(let i=0;i<values.length;i++){
+        let value = values[i];
+        tabs.push(<Tab label={value.name}>
+                    <Text>{value.name}</Text>
                 </Tab>)
     }
 
@@ -43,5 +40,5 @@ const getProjects = async (issueId) => {
     .asUser()
     .requestJira(`/rest/api/3/project/search`);
     const data = await res.json();
-    return data.values;
+    return data;
 };
