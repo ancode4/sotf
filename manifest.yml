@@ -3,6 +3,7 @@ modules:
     - key: stay-on-top-main-admin-page
       function: main-admin-page
       title: Stay on top
+      icon: https://www.sparxsys.com/sites/default/files/stay-on-top-logo-square.png
   jira:issueGlance:
     - key: stay-on-top-jira-issue-glance
       function: main-glance
@@ -20,3 +21,4 @@ permissions:
   scopes:
     - read:jira-work
     - manage:jira-configuration
+    - manage:jira-project

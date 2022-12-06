@@ -25,10 +25,10 @@ const MainAdminPage = () => {
     }
 
     const issueTypes = useState(async ()=> await getIssueTypes() );
-
     const issueTypesSchemes = useState(async ()=> await getIssueTypesSchemes() );
-    //console.log("ISSUE TYPE SCHEMES:")
-    //console.log(issueTypesSchemes)
+    const workflows = useState(async ()=> await getWorkflows() );
+    const workflowSchemes = useState(async ()=> await getWorkflowscheme() );
+    console.log(workflowSchemes)
 
     return (
         <AdminPage>
@@ -53,7 +53,7 @@ const MainAdminPage = () => {
             <Table>
                 <Row>
                     <Cell>
-                        <Text>Number of issue types</Text>
+                        <Text>Issue type count</Text>
                     </Cell>
                     <Cell>
                         <Text>{issueTypes[0].length}</Text>
@@ -61,10 +61,30 @@ const MainAdminPage = () => {
                 </Row>
                 <Row>
                     <Cell>
-                        <Text>Number of issue types schemes</Text>
+                        <Text>Issue types scheme count</Text>
                     </Cell>
                     <Cell>
                         <Text>{issueTypesSchemes[0].total}</Text>
+                    </Cell>
+                </Row>
+            </Table>
+
+            <Heading size="small">Workflows</Heading>
+            <Table>
+                <Row>
+                    <Cell>
+                        <Text>Workflow count</Text>
+                    </Cell>
+                    <Cell>
+                        <Text>{workflows[0].total}</Text>
+                    </Cell>
+                </Row>
+                <Row>
+                    <Cell>
+                        <Text>Workflow scheme count</Text>
+                    </Cell>
+                    <Cell>
+                        <Text>{workflowSchemes[0].total}</Text>
                     </Cell>
                 </Row>
             </Table>
@@ -88,6 +108,22 @@ const getIssueTypesSchemes = async () => {
   const res = await api
     .asUser()
     .requestJira(`/rest/api/3/issuetypescheme`);
+    const data = await res.json();
+    return data;
+};
+
+const getWorkflows = async () => {
+  const res = await api
+    .asUser()
+    .requestJira(`/rest/api/3/workflow/search`);
+    const data = await res.json();
+    return data;
+};
+
+const getWorkflowscheme = async () => {
+  const res = await api
+    .asUser()
+    .requestJira(`/rest/api/3/workflowscheme`);
     const data = await res.json();
     return data;
 };
