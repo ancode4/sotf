@@ -28,7 +28,10 @@ const MainAdminPage = () => {
     const issueTypesSchemes = useState(async ()=> await getIssueTypesSchemes() );
     const workflows = useState(async ()=> await getWorkflows() );
     const workflowSchemes = useState(async ()=> await getWorkflowscheme() );
-    console.log(workflowSchemes)
+    const issueFields = useState(async ()=> await getIssueFields() );
+    const customIssueFields = issueFields[0].filter( (field) => {
+        return field.custom === true;
+    } )
 
     return (
         <AdminPage>
@@ -88,6 +91,18 @@ const MainAdminPage = () => {
                     </Cell>
                 </Row>
             </Table>
+
+            <Heading size="small">Custom Fields</Heading>
+            <Table>
+                <Row>
+                    <Cell>
+                        <Text>Custom field count</Text>
+                    </Cell>
+                    <Cell>
+                        <Text>{customIssueFields.length}</Text>
+                    </Cell>
+                </Row>
+            </Table>
         </AdminPage>
     );
 };
@@ -100,6 +115,14 @@ const getIssueTypes = async () => {
   const res = await api
     .asUser()
     .requestJira(`/rest/api/3/issuetype`);
+    const data = await res.json();
+    return data;
+};
+
+const getIssueFields = async () => {
+  const res = await api
+    .asUser()
+    .requestJira(`/rest/api/3/field`);
     const data = await res.json();
     return data;
 };
