@@ -22,3 +22,4 @@ permissions:
     - read:jira-work
     - manage:jira-configuration
     - manage:jira-project
+    - read:confluence-content.summary

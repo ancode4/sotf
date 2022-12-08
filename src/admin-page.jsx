@@ -1,5 +1,6 @@
 import ForgeUI, {AdminPage, render, Text, Heading, 
         useProductContext, useState, Table, Head, Row, Cell} from '@forge/ui';
+import api, { route } from "@forge/api";
 
 
 const MainAdminPage = () => {
@@ -32,6 +33,9 @@ const MainAdminPage = () => {
     const customIssueFields = issueFields[0].filter( (field) => {
         return field.custom === true;
     } )
+
+    const confluenceComments = useState(async ()=> await fetchCommentsForContent("753665"))
+    console.log(confluenceComments)
 
     return (
         <AdminPage>
@@ -114,7 +118,7 @@ export const runAdminPage = render(
 const getIssueTypes = async () => {
   const res = await api
     .asUser()
-    .requestJira(`/rest/api/3/issuetype`);
+    .requestJira(route`/rest/api/3/issuetype`);
     const data = await res.json();
     return data;
 };
@@ -122,7 +126,7 @@ const getIssueTypes = async () => {
 const getIssueFields = async () => {
   const res = await api
     .asUser()
-    .requestJira(`/rest/api/3/field`);
+    .requestJira(route`/rest/api/3/field`);
     const data = await res.json();
     return data;
 };
@@ -130,7 +134,7 @@ const getIssueFields = async () => {
 const getIssueTypesSchemes = async () => {
   const res = await api
     .asUser()
-    .requestJira(`/rest/api/3/issuetypescheme`);
+    .requestJira(route`/rest/api/3/issuetypescheme`);
     const data = await res.json();
     return data;
 };
@@ -138,7 +142,7 @@ const getIssueTypesSchemes = async () => {
 const getWorkflows = async () => {
   const res = await api
     .asUser()
-    .requestJira(`/rest/api/3/workflow/search`);
+    .requestJira(route`/rest/api/3/workflow/search`);
     const data = await res.json();
     return data;
 };
@@ -146,7 +150,7 @@ const getWorkflows = async () => {
 const getWorkflowscheme = async () => {
   const res = await api
     .asUser()
-    .requestJira(`/rest/api/3/workflowscheme`);
+    .requestJira(route`/rest/api/3/workflowscheme`);
     const data = await res.json();
     return data;
 };
@@ -154,7 +158,16 @@ const getWorkflowscheme = async () => {
 const getProjects = async () => {
   const res = await api
     .asUser()
-    .requestJira(`/rest/api/3/project/search`);
+    .requestJira(route`/rest/api/3/project/search`);
     const data = await res.json();
     return data;
+};
+
+const fetchCommentsForContent = async (contentId) => {
+  const res = await api
+    .asUser()
+    .requestConfluence(route`/wiki/rest/api/content/${contentId}/child/comment`);
+
+  const data = await res.json();
+  return data.results;
 };
