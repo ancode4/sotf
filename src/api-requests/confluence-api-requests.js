@@ -9,13 +9,36 @@ export const fetchPage = async (pageId) => {
   return data.results;
 };
 
+export const createPage = async (title, spaceKey, content) => {
+
+  const bodyData = {}
+  bodyData.title = title
+  bodyData.type = 'page'
+
+  const space = {}
+  space.key = spaceKey
+  bodyData.space = space
+
+  const body = {}
+  const storage = {}
+  storage.representation = 'storage'
+  storage.value = content
+  body.storage = storage
+  bodyData.body = body;
 
 
-/*const fetchCommentsForContent = async (contentId) => {
   const res = await api
     .asUser()
-    .requestConfluence(route`/wiki/rest/api/content/${contentId}/child/comment`);
+    .requestConfluence(route`/wiki/rest/api/content`,{
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: bodyData
+    });
 
   const data = await res.json();
   return data.results;
-};*/
+};
+

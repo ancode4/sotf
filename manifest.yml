@@ -23,3 +23,4 @@ permissions:
     - manage:jira-configuration
     - manage:jira-project
     - read:confluence-content.summary
+    - write:confluence-content
