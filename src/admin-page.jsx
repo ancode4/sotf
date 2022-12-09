@@ -1,6 +1,7 @@
 import ForgeUI, {AdminPage, render, Text, Heading, 
         useProductContext, useState, Table, Head, Row, Cell} from '@forge/ui';
 import api, { route } from "@forge/api";
+import { fetchPage } from "./api-requests/confluence-api-requests.js"
 
 
 const MainAdminPage = () => {
@@ -34,8 +35,8 @@ const MainAdminPage = () => {
         return field.custom === true;
     } )
 
-    const confluenceComments = useState(async ()=> await fetchCommentsForContent("753665"))
-    console.log(confluenceComments)
+    const pageData = useState(async ()=> await fetchPage(753665))
+    console.log(pageData)
 
     return (
         <AdminPage>
@@ -161,13 +162,4 @@ const getProjects = async () => {
     .requestJira(route`/rest/api/3/project/search`);
     const data = await res.json();
     return data;
-};
-
-const fetchCommentsForContent = async (contentId) => {
-  const res = await api
-    .asUser()
-    .requestConfluence(route`/wiki/rest/api/content/${contentId}/child/comment`);
-
-  const data = await res.json();
-  return data.results;
 };
