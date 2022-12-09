@@ -1,6 +1,6 @@
 import ForgeUI, {AdminPage, render, Text, Heading, 
         useProductContext, useState, Table, Head, Row, Cell} from '@forge/ui';
-
+import { getIssueTypes, getIssueFields, getIssueTypesSchemes, getWorkflows, getWorkflowscheme, getProjects } from './api-requests/jira-api-requests.js'
 
 const MainAdminPage = () => {
     const projects = useState(async ()=> await getProjects() );
@@ -110,51 +110,3 @@ const MainAdminPage = () => {
 export const runAdminPage = render(
     <MainAdminPage />
 );
-
-const getIssueTypes = async () => {
-  const res = await api
-    .asUser()
-    .requestJira(`/rest/api/3/issuetype`);
-    const data = await res.json();
-    return data;
-};
-
-const getIssueFields = async () => {
-  const res = await api
-    .asUser()
-    .requestJira(`/rest/api/3/field`);
-    const data = await res.json();
-    return data;
-};
-
-const getIssueTypesSchemes = async () => {
-  const res = await api
-    .asUser()
-    .requestJira(`/rest/api/3/issuetypescheme`);
-    const data = await res.json();
-    return data;
-};
-
-const getWorkflows = async () => {
-  const res = await api
-    .asUser()
-    .requestJira(`/rest/api/3/workflow/search`);
-    const data = await res.json();
-    return data;
-};
-
-const getWorkflowscheme = async () => {
-  const res = await api
-    .asUser()
-    .requestJira(`/rest/api/3/workflowscheme`);
-    const data = await res.json();
-    return data;
-};
-
-const getProjects = async () => {
-  const res = await api
-    .asUser()
-    .requestJira(`/rest/api/3/project/search`);
-    const data = await res.json();
-    return data;
-};
