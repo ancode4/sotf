@@ -22,8 +22,8 @@ const MainAdminPage = () => {
 
     return (
         <AdminPage>
-            <Heading size="medium">Site statistics</Heading>
-            <Heading size="small">
+            <Heading size="large">Site statistics</Heading>
+            <Heading size="medium">
                 <Text>
                     <Link href="/jira/projects" openNewTab="true">Projects</Link>
                 </Text>
@@ -79,7 +79,13 @@ const MainAdminPage = () => {
                 </Row>
             </Table>
 
-            <Heading size="small">Issue Types</Heading>
+            <Heading size="medium">
+                <Text>
+                    <Link href="/jira/settings/issues/issue-types" openNewTab="true">
+                    Issue Types
+                    </Link>
+                </Text>
+            </Heading>
             <Table>
                 <Row>
                     <Cell>
@@ -91,7 +97,10 @@ const MainAdminPage = () => {
                 </Row>
                 <Row>
                     <Cell>
-                        <Text>Issue types scheme count</Text>
+                        <Text>
+                            <Link href="/jira/settings/issues/issue-type-schemes" openNewTab="true">Issue type schemes
+                            </Link>
+                        </Text>
                     </Cell>
                     <Cell>
                         <Text>{issueTypesSchemes[0].total}</Text>
@@ -99,7 +108,13 @@ const MainAdminPage = () => {
                 </Row>
             </Table>
 
-            <Heading size="small">Workflows</Heading>
+            <Heading size="medium">
+                <Text>
+                    <Link href="/jira/settings/issues/workflows" openNewTab="true">
+                    Workflows
+                    </Link>
+                </Text>
+            </Heading>
             <Table>
                 <Row>
                     <Cell>
@@ -111,7 +126,10 @@ const MainAdminPage = () => {
                 </Row>
                 <Row>
                     <Cell>
-                        <Text>Workflow scheme count</Text>
+                        <Text>
+                            <Link href="/secure/admin/ViewWorkflowSchemes.jspa" openNewTab="true">Workflow schemes
+                            </Link>
+                        </Text>
                     </Cell>
                     <Cell>
                         <Text>{workflowSchemes[0].total}</Text>
@@ -119,11 +137,19 @@ const MainAdminPage = () => {
                 </Row>
             </Table>
 
-            <Heading size="small">Custom Fields</Heading>
+            <Heading size="medium">
+                <Text>
+                    <Link href="/secure/admin/ViewCustomFields.jspa" openNewTab="true">
+                    Custom Fields
+                    </Link>
+                </Text>
+            </Heading>
             <Table>
                 <Row>
                     <Cell>
-                        <Text>Custom field count</Text>
+                        <Text>
+                            Custom field count    
+                        </Text>
                     </Cell>
                     <Cell>
                         <Text>{customIssueFields.length}</Text>
