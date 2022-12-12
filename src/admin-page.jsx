@@ -1,4 +1,4 @@
-import ForgeUI, {AdminPage, render, Text, Heading, Link,
+import ForgeUI, {AdminPage, render, Text, Heading, Link, Form, Toggle,
         useProductContext, useState, Table, Head, Row, Cell} from '@forge/ui';
 import { getIssueTypes, getIssueFields, getIssueTypesSchemes, getWorkflows, getWorkflowscheme, getProjects } from './api-requests/jira-api-requests.js'
 import { groupBy } from './util/util.js'
@@ -164,8 +164,23 @@ export const runAdminPage = render(
     <MainAdminPage />
 );
 
+const onSubmitConfigForm = async (formData) => {
+    /**
+     * formData:
+     * {
+     *    username: 'Username',
+     *    products: ['jira']
+     * }
+     */
+    console.log(formData);
+};
+
 export const runConfigurePage = render(
     <AdminPage>
-        <Text>Hello Configurer!</Text>
+        <Heading size='medium'>Stay on top App modules</Heading>
+        <Form onSubmit={onSubmitConfigForm} >
+            <Toggle label="Issue glance" name="module_issue_glance" />
+            <Toggle label="Admin page" name="module_admin_page" />
+        </Form>
     </AdminPage>
 );
