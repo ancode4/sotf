@@ -2,8 +2,12 @@ modules:
   jira:adminPage:
     - key: stay-on-top-main-admin-page
       function: main-admin-page
-      title: Stay on top
+      title: Stay on top Admin
       icon: https://www.sparxsys.com/sites/default/files/stay-on-top-logo-square.png
+    - key: stay-on-top-configure-page
+      function: main-configure-page
+      title: Configure Stay On Top
+      useAsConfig: true
   jira:issueGlance:
     - key: stay-on-top-jira-issue-glance
       function: main-glance
@@ -15,6 +19,8 @@ modules:
       handler: index.run
     - key: main-admin-page
       handler: admin-page.runAdminPage
+    - key: main-configure-page
+      handler: admin-page.runConfigurePage
 app:
   id: ari:cloud:ecosystem::app/6eba0826-b868-429a-bcec-f8dfa96de733
 permissions:

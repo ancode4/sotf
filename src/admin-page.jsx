@@ -1,28 +1,15 @@
-import ForgeUI, {AdminPage, render, Text, Heading, 
+import ForgeUI, {AdminPage, render, Text, Heading, Link,
         useProductContext, useState, Table, Head, Row, Cell} from '@forge/ui';
 import { getIssueTypes, getIssueFields, getIssueTypesSchemes, getWorkflows, getWorkflowscheme, getProjects } from './api-requests/jira-api-requests.js'
+import { groupBy } from './util/util.js'
 
 const MainAdminPage = () => {
     const projects = useState(async ()=> await getProjects() );
     const values = projects[0].values;
-    
-    const projectRows = []
-    for(let i=0;i<values.length;i++){
-        let project = values[i];
-        projectRows.push(
-            <Row>       
-                <Cell>
-                    <Text>{i+1}</Text>
-                </Cell>
-                <Cell>
-                    <Text>{project.key}</Text>
-                </Cell>
-                <Cell>
-                    <Text>{project.name}</Text>
-                </Cell>
-            </Row>
-        )
-    }
+    const simplified = values.filter( project => project.simplified )
+
+    const projectTypeKeyData = groupBy( values, 'projectTypeKey');
+    const projectTypeKeys = Object.keys(projectTypeKeyData);
 
     const issueTypes = useState(async ()=> await getIssueTypes() );
     const issueTypesSchemes = useState(async ()=> await getIssueTypesSchemes() );
@@ -36,20 +23,60 @@ const MainAdminPage = () => {
     return (
         <AdminPage>
             <Heading size="medium">Site statistics</Heading>
-            <Heading size="small">Projects</Heading>
+            <Heading size="small">
+                <Text>
+                    <Link href="/jira/projects" openNewTab="true">Projects</Link>
+                </Text>
+            </Heading>
             <Table>
-                <Head>
+                <Row>
                     <Cell>
-                        <Text>Sr.</Text>
+                        <Text>Total</Text>
                     </Cell>
                     <Cell>
-                        <Text>Key</Text>
+                        <Text>{values.length}</Text>
+                    </Cell>
+                </Row>
+                <Row>
+                    <Cell>
+                        <Text>Team managed projects</Text>
                     </Cell>
                     <Cell>
-                        <Text>Name</Text>
+                        <Text>{simplified.length}</Text>
                     </Cell>
-                </Head>
-                {projectRows}
+                </Row>
+                <Row>
+                    <Cell>
+                        <Text>Team managed projects</Text>
+                    </Cell>
+                    <Cell>
+                        <Text>{values.length-simplified.length}</Text>
+                    </Cell>
+                </Row>
+                <Row>
+                    <Cell>
+                        <Text>JIRA Software projects</Text>
+                    </Cell>
+                    <Cell>
+                        <Text>{projectTypeKeyData['software'].length}</Text>
+                    </Cell>
+                </Row>
+                <Row>
+                    <Cell>
+                        <Text>JSM projects</Text>
+                    </Cell>
+                    <Cell>
+                        <Text>{projectTypeKeyData['service_desk'].length}</Text>
+                    </Cell>
+                </Row>
+                <Row>
+                    <Cell>
+                        <Text>JWM projects</Text>
+                    </Cell>
+                    <Cell>
+                        <Text>{projectTypeKeyData['business'].length}</Text>
+                    </Cell>
+                </Row>
             </Table>
 
             <Heading size="small">Issue Types</Heading>
@@ -109,4 +136,10 @@ const MainAdminPage = () => {
 
 export const runAdminPage = render(
     <MainAdminPage />
+);
+
+export const runConfigurePage = render(
+    <AdminPage>
+        <Text>Hello Configurer!</Text>
+    </AdminPage>
 );
