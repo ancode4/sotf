@@ -28,3 +28,4 @@ permissions:
     - read:jira-work
     - manage:jira-configuration
     - manage:jira-project
+    - storage:app

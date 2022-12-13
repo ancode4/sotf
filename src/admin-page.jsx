@@ -2,6 +2,8 @@ import ForgeUI, {AdminPage, render, Text, Heading, Link, Form, Toggle,
         useProductContext, useState, Table, Head, Row, Cell} from '@forge/ui';
 import { getIssueTypes, getIssueFields, getIssueTypesSchemes, getWorkflows, getWorkflowscheme, getProjects } from './api-requests/jira-api-requests.js'
 import { groupBy } from './util/util.js'
+import { storage } from '@forge/api';
+
 
 const MainAdminPage = () => {
     const projects = useState(async ()=> await getProjects() );
@@ -164,23 +166,39 @@ export const runAdminPage = render(
     <MainAdminPage />
 );
 
-const onSubmitConfigForm = async (formData) => {
-    /**
-     * formData:
-     * {
-     *    username: 'Username',
-     *    products: ['jira']
-     * }
-     */
-    console.log(formData);
+
+const ConfigPage = () => {
+    let issueGlanceEnabled = useState(async () => await storage.get('module_issue_glance_enabled') )
+    //if(typeof issueGlanceEnabled === 'undefined') {
+      //  issueGlanceEnabled = false;
+    //}
+    let igEnabled = issueGlanceEnabled[0] == null ? false : issueGlanceEnabled[0]
+    let adminPageEnabled = useState(async () => await storage.get('module_admin_page_enabled') )
+    //if(typeof adminPageEnabled === 'undefined') {
+      //  adminPageEnabled = false;
+    //}
+    let apEnabled = adminPageEnabled[0] == null ? false : adminPageEnabled[0]
+    console.log("ISSUE_GLANCE_Enabled:")
+    console.log(JSON.stringify(issueGlanceEnabled,null,2));
+    console.log("ADMIN_PAGE_Enabled")
+    console.log(JSON.stringify(adminPageEnabled,null,2))
+    return (
+        <AdminPage>
+            <Heading size='medium'>Stay on top App modules</Heading>
+            <Form onSubmit={onSubmitConfigForm} >
+                <Toggle label="Issue glance" name="module_issue_glance" defaultChecked={igEnabled} />
+                <Toggle label="Admin page" name="module_admin_page" defaultChecked={apEnabled} />
+            </Form>
+        </AdminPage>
+    );
 };
 
 export const runConfigurePage = render(
-    <AdminPage>
-        <Heading size='medium'>Stay on top App modules</Heading>
-        <Form onSubmit={onSubmitConfigForm} >
-            <Toggle label="Issue glance" name="module_issue_glance" />
-            <Toggle label="Admin page" name="module_admin_page" />
-        </Form>
-    </AdminPage>
+    <ConfigPage />
 );
+
+const onSubmitConfigForm = async (formData) => {
+    storage.set('module_issue_glance_enabled', formData.hasOwnProperty('module_issue_glance') ? formData.module_issue_glance : false)
+    storage.set('module_admin_page_enabled', formData.hasOwnProperty('module_admin_page') ? formData.module_admin_page : false)
+    console.log(formData);
+};
