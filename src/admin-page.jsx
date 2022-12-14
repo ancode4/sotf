@@ -4,7 +4,6 @@ import { getIssueTypes, getIssueFields, getIssueTypesSchemes, getWorkflows, getW
 import { groupBy } from './util/util.js'
 import { storage } from '@forge/api';
 
-
 const MainAdminPage = () => {
     const projects = useState(async ()=> await getProjects() );
     const values = projects[0].values;
@@ -166,28 +165,27 @@ export const runAdminPage = render(
     <MainAdminPage />
 );
 
-
 const ConfigPage = () => {
-    let issueGlanceEnabled = useState(async () => await storage.get('module_issue_glance_enabled') )
-    //if(typeof issueGlanceEnabled === 'undefined') {
-      //  issueGlanceEnabled = false;
-    //}
-    let igEnabled = issueGlanceEnabled[0] == null ? false : issueGlanceEnabled[0]
-    let adminPageEnabled = useState(async () => await storage.get('module_admin_page_enabled') )
-    //if(typeof adminPageEnabled === 'undefined') {
-      //  adminPageEnabled = false;
-    //}
-    let apEnabled = adminPageEnabled[0] == null ? false : adminPageEnabled[0]
-    console.log("ISSUE_GLANCE_Enabled:")
-    console.log(JSON.stringify(issueGlanceEnabled,null,2));
-    console.log("ADMIN_PAGE_Enabled")
-    console.log(JSON.stringify(adminPageEnabled,null,2))
+    //const [moduleConfigState, setModuleConfigState] = useState(undefined);
+
+    const moduleConfigState = useState(async () => {
+        const storedModuleConfigState = await storage.get('moduleConfigState');
+        console.log("storedModuleConfigState: ")
+        console.log(storedModuleConfigState)
+        if(storedModuleConfigState == null) {
+            return getDefaultModuleConfig
+        }
+        return storedModuleConfigState;
+    });
+
+    console.log("moduleConfigState: ")
+    console.log(JSON.stringify(moduleConfigState,null,2))
     return (
         <AdminPage>
             <Heading size='medium'>Stay on top App modules</Heading>
             <Form onSubmit={onSubmitConfigForm} >
-                <Toggle label="Issue glance" name="module_issue_glance" defaultChecked={igEnabled} />
-                <Toggle label="Admin page" name="module_admin_page" defaultChecked={apEnabled} />
+                <Toggle label="Issue glance" name="module_issue_glance" defaultChecked={moduleConfigState[0].module_issue_glance_enabled} />
+                <Toggle label="Admin page" name="module_admin_page" defaultChecked={moduleConfigState[0].module_admin_page_enabled} />
             </Form>
         </AdminPage>
     );
@@ -198,7 +196,17 @@ export const runConfigurePage = render(
 );
 
 const onSubmitConfigForm = async (formData) => {
-    storage.set('module_issue_glance_enabled', formData.hasOwnProperty('module_issue_glance') ? formData.module_issue_glance : false)
-    storage.set('module_admin_page_enabled', formData.hasOwnProperty('module_admin_page') ? formData.module_admin_page : false)
-    console.log(formData);
+    const moduleConfigState = {}
+    moduleConfigState.module_issue_glance_enabled = formData.hasOwnProperty('module_issue_glance') ? formData.module_issue_glance : false;
+    moduleConfigState.module_admin_page_enabled = formData.hasOwnProperty('module_admin_page') ? formData.module_admin_page : false;
+    console.log("moduleConfigState: formData")
+    console.log(moduleConfigState)
+    await storage.set('moduleConfigState',moduleConfigState);
 };
+
+const getDefaultModuleConfig = () => {
+    const moduleConfigState = {}
+    moduleConfigState.module_issue_glance_enabled = true;
+    moduleConfigState.module_admin_page_enabled = true;
+    return moduleConfigState;
+}
