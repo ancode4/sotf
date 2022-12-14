@@ -165,27 +165,30 @@ export const runAdminPage = render(
     <MainAdminPage />
 );
 
-const ConfigPage = () => {
-    //const [moduleConfigState, setModuleConfigState] = useState(undefined);
+const ConfigPage = () => {=
 
-    const moduleConfigState = useState(async () => {
+    const [moduleConfigState, setModuleConfigState] = useState(async () => {
         const storedModuleConfigState = await storage.get('moduleConfigState');
-        console.log("storedModuleConfigState: ")
-        console.log(storedModuleConfigState)
         if(storedModuleConfigState == null) {
             return getDefaultModuleConfig
         }
         return storedModuleConfigState;
     });
 
-    console.log("moduleConfigState: ")
-    console.log(JSON.stringify(moduleConfigState,null,2))
+    const onSubmitConfigForm = async (formData) => {
+        const moduleConfigState = {}
+        moduleConfigState.module_issue_glance_enabled = formData.hasOwnProperty('module_issue_glance') ? formData.module_issue_glance : false;
+        moduleConfigState.module_admin_page_enabled = formData.hasOwnProperty('module_admin_page') ? formData.module_admin_page : false;
+        await storage.set('moduleConfigState',moduleConfigState);
+        setModuleConfigState(moduleConfigState)
+    };
+
     return (
         <AdminPage>
             <Heading size='medium'>Stay on top App modules</Heading>
             <Form onSubmit={onSubmitConfigForm} >
-                <Toggle label="Issue glance" name="module_issue_glance" defaultChecked={moduleConfigState[0].module_issue_glance_enabled} />
-                <Toggle label="Admin page" name="module_admin_page" defaultChecked={moduleConfigState[0].module_admin_page_enabled} />
+                <Toggle label="Issue glance" name="module_issue_glance" defaultChecked={moduleConfigState.module_issue_glance_enabled} />
+                <Toggle label="Admin page" name="module_admin_page" defaultChecked={moduleConfigState.module_admin_page_enabled} />
             </Form>
         </AdminPage>
     );
@@ -195,18 +198,6 @@ export const runConfigurePage = render(
     <ConfigPage />
 );
 
-const onSubmitConfigForm = async (formData) => {
-    const moduleConfigState = {}
-    moduleConfigState.module_issue_glance_enabled = formData.hasOwnProperty('module_issue_glance') ? formData.module_issue_glance : false;
-    moduleConfigState.module_admin_page_enabled = formData.hasOwnProperty('module_admin_page') ? formData.module_admin_page : false;
-    console.log("moduleConfigState: formData")
-    console.log(moduleConfigState)
-    await storage.set('moduleConfigState',moduleConfigState);
-};
-
 const getDefaultModuleConfig = () => {
-    const moduleConfigState = {}
-    moduleConfigState.module_issue_glance_enabled = true;
-    moduleConfigState.module_admin_page_enabled = true;
-    return moduleConfigState;
+    return { 'module_issue_glance_enabled' : false, 'module_admin_page_enabled' : false };
 }
