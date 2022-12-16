@@ -1,5 +1,18 @@
 import ForgeUI, { render, Fragment, Text, Strong, IssueGlance, useProductContext, useState, SectionMessage } from '@forge/ui';
 import { storage } from '@forge/api';
+import Resolver from '@forge/resolver';
+
+const resolver = new Resolver();
+
+resolver.define('getText', (req) => {
+    console.log(req);
+
+    return 'Hello, world!';
+});
+
+export const handler = resolver.getDefinitions();
+
+
 
 enum LicenseOverride {
   ACTIVE = 'active',
